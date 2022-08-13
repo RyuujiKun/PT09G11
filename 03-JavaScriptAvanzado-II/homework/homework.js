@@ -19,6 +19,10 @@ function counter() {
   otroContador()      // 2
   otroContador()      // 3
    */
+  let count = 1;
+  return () => {
+    return count++;
+  };
 }
 
 function cacheFunction(cb) {
@@ -41,6 +45,13 @@ function cacheFunction(cb) {
   squareCache(5)    // no volverá a invocar a square, simplemente buscará en la caché cuál es el resultado de square(5) y lo retornará (tip: si usaste un objeto, podés usar hasOwnProperty) 
 
   */
+  let obj = {};
+  return (arg) => {
+    if (!obj.hasOwnProperty(arg)) {
+      obj[arg] = cb(arg);
+    }
+    return obj[arg];
+  };
 }
 
 // Bind
@@ -70,6 +81,8 @@ function getNombre() {
 let getNombreInstructor;
 let getNombreAlumno;
 
+getNombreInstructor = getNombre.bind(instructor);
+getNombreAlumno = getNombre.bind(alumno);
 /*
   Ejercicio 4
   
@@ -83,6 +96,10 @@ function crearCadena(delimitadorIzquierda, delimitadorDerecha, cadena) {
 let textoAsteriscos;
 let textoGuiones;
 let textoUnderscore;
+
+textoAsteriscos = crearCadena.bind("*", "*", "*");
+textoGuiones = crearCadena.bind("-", "-", "-");
+textoUnderscore = crearCadena.bind("_", "_", "_");
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
