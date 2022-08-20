@@ -11,9 +11,73 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
 
-function LinkedList() {}
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.size = 0;
+  }
 
-function Node(value) {}
+  add(value) {
+    let node = new Node(value);
+    let current;
+
+    if (this.head === null) {
+      this.head = node;
+    } else {
+      current = this.head;
+
+      while (current.next) {
+        current = current.next;
+      }
+      current.next = node;
+    }
+    this.size++;
+  }
+
+  remove(value) {
+    if (!this.head) return null;
+    if (!this.head.next) {
+      let newValue = this.head.value;
+      this.head = null;
+      return newValue;
+    } else {
+      let current = this.head;
+      while (current.next.next) {
+        current = current.next;
+      }
+      let valor = current.next.value;
+      current.next = null;
+      return valor;
+    }
+  }
+
+  search(fn) {
+    if (!this.head) return null;
+    let buscar = () => {};
+    if (typeof fn !== "function") {
+      buscar = (value) => value === fn;
+    } else {
+      buscar = fn;
+    }
+
+    let current = this.head;
+    while (current) {
+      if (buscar(current.value)) {
+        return current.value;
+      } else {
+        current = current.next;
+      }
+    }
+    return current;
+  }
+}
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
 
 /*
 Implementar la clase HashTable.
@@ -30,7 +94,40 @@ La clase debe tener los siguientes métodos:
 Ejemplo: supongamos que quiero guardar {instructora: 'Ani'} en la tabla. Primero puedo chequear, con hasKey, si ya hay algo en la tabla con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se almacenará el par clave-valor en un bucket específico (determinado al hashear la clave)
 */
 
-function HashTable() {}
+class HashTable {
+  constructor() {
+    this.numBuckets = 35;
+    this.buckets = [];
+  }
+
+  hash = (key) => {
+    let sum = 0;
+    for (let i = 0; i < key.length; i++) {
+      sum += key.charCodeAt(i);
+    }
+    return sum % this.numBuckets;
+  };
+
+  set = (key, value) => {
+    if (typeof key !== "string") throw new TypeError("key must be a string");
+    let i = this.hash(key);
+
+    if (this.buckets[i] === undefined) {
+      this.buckets[i] = {};
+    }
+    this.buckets[i][key] = value;
+  };
+
+  get = (key) => {
+    let i = this.hash(key);
+    return this.buckets[i][key];
+  };
+
+  hasKey = (key) => {
+    let i = this.hash(key);
+    return this.buckets[i].hasOwnProperty(key);
+  };
+}
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
